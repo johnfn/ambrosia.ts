@@ -1,5 +1,4 @@
 # ambrosia.ts
-typescript key-value observation microframework
 
 `ambrosia.ts` is a TypeScript microframework that gives you key-value observation and a couple of other small, handy features. If you've used Backbone.js, think of it as the evented parts of Backbone, but using plain old JavaScript objects, rather than having to extend and use Backbone's objects. 
 
@@ -13,10 +12,10 @@ It's what you're here for, right?
 
 **Keys and Values**
 
-  class PaintCanvas extends Ambrosia {
-    @prop width = 400;
-    @prop height = 200;
-  }
+    class PaintCanvas extends Ambrosia {
+      @prop width = 400;
+      @prop height = 200;
+    }
 
 Now we have a class with two properties, and changing these properties will cause events to be triggered! 
 
@@ -37,23 +36,23 @@ Notice how we use TypeScript decorators to inform Ambrosia that the `width` and 
 
 Ambrosia also provides validated properties:
 
-  class PaintCanvas extends Ambrosia {
-    @validatedProp(PaintCanvas.validateWidth) width: number = 400;
-    
-    public static validateKey(width: number): boolean {
-      return width <= 500 && width >= 0;
+    class PaintCanvas extends Ambrosia {
+      @validatedProp(PaintCanvas.validateWidth) width: number = 400;
+      
+      public static validateKey(width: number): boolean {
+        return width <= 500 && width >= 0;
+      }
     }
-  }
 
 Now let's see what happens:
 
-  var canvas = new PaintCanvas();
-  
-  canvas.width = 100; // fine
-  canvas.width = 0; // still fine
-  canvas.width = 500; // *not* fine, logs to console.error and canvas.width does not change:
-  
-  console.log(canvas.width); // 0
+    var canvas = new PaintCanvas();
+    
+    canvas.width = 100; // fine
+    canvas.width = 0; // still fine
+    canvas.width = 500; // *not* fine, logs to console.error and canvas.width does not change:
+    
+    console.log(canvas.width); // 0
 
 ### Listening to events
 
