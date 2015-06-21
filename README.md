@@ -78,7 +78,7 @@ In Ambrosia `change` is actually fired *whenever* a value is assigned - even if 
 If you want the Backbone-esque behavior of firing an event when the value is different, we have `change-different`.
 
 * "change-different" - Any time anything is set to a different value
-* "change:foo" - Any time `foo` is set to a different value
+* "change-different:foo" - Any time `foo` is set to a different value
 
 etc.
 
