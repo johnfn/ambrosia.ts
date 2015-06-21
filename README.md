@@ -68,10 +68,19 @@ There's also `listenToOnce` for when you're only concerned with the first time a
 
 You can listen to the following:
 
-* "change" - Any time anything is changed
-* "change:foo" - Any time `foo` is changed
-* "change:foo:5" - Any time `foo` is changed to `5`
-* "change:foo&&bar" - Any time `foo` is changed on an object, and `thatObject.bar` is truthy.
+* "change" - Any time anything is set
+* "change:foo" - Any time `foo` is set
+* "change:foo:5" - Any time `foo` is set to `5`
+* "change:foo&&bar" - Any time `foo` is set on an object, and `thatObject.bar` is truthy.
+
+In Ambrosia `change` is actually fired *whenever* a value is assigned - even if it's the same value. Backbone always bothered me because `change` is only fired when the value is different than the old value. Occasionally we have to hack around this limitation, and it gets a little ugly.
+
+If you want the Backbone-esque behavior of firing an event when the value is different, we have `change-different`.
+
+* "change-different" - Any time anything is set to a different value
+* "change:foo" - Any time `foo` is set to a different value
+
+etc.
 
 ### Triggering events
 
