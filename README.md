@@ -80,6 +80,38 @@ Feel free to trigger your own events:
     myObject.listenTo(myObject, "woohoo", function(a: number, b: number) { console.log(a, b); })
     myObject.trigger("woohoo", 5, 6); // Will console.log 5 and 6
 
+### Maybe<T>
+
+Sometimes... implicitly nullable objects are not enough...
+
+Sometimes... you want more.
+
+Sometimes... you want **MONADS.**
+
+Well, you're not going to get monads (yet?), but you do get a `Maybe<T>` that represents a `T` that can be `null`. Here's an example of how to use it.
+
+**A function that returns a nullable number:**
+
+    function safeIndexOf(array: number[], value: number): Maybe<number> {
+        var index = array.indexOf(value);
+        
+        if (index == -1) {
+            return Maybe<number>();
+        } else {
+            return Maybe<number>(index);
+        }
+    }
+
+**Using it**
+
+var result: Maybe<number> = safeIndexOf(myList, 5);
+
+    if (result.hasValue) {
+        console.log("5 found!");
+    } else {
+        console.log("5 not found. :(");
+    }
+
 ### Is that it?
 
 Yes. I said it was a microframework, not a macroframework. Or angularjs. :-)
