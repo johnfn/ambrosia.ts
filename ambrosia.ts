@@ -184,14 +184,28 @@ class Ambrosia {
   private overrideSetterGetter(pd: PropertyDescriptor, accessorName: string, proto: any) {
     // overrwrite property getters with our own
 
+    var oldValue;
+    var hasSetOldValue = false;
+
     Object.defineProperty(proto, accessorName, {
       get: pd.get,
       set: function(val) {
+        var differentValue = !hasSetOldValue || val != oldValue;
+        oldValue = val;
+
         pd.set.bind(this)(val)
 
         this.trigger('change');
         this.trigger('change:' + accessorName);
         this.trigger('change:' + accessorName + ':' + val);
+
+        if (differentValue) {
+          this.trigger('change-different');
+          this.trigger('change-different:' + accessorName);
+          this.trigger('change-different:' + accessorName + ':' + val);
+        }
+
+        hasSetOldValue = true;
       },
       enumerable: true,
       configurable: true
@@ -264,5 +278,4 @@ class Ambrosia {
 
     this.listenToHelper(target, eventName, callback, true);
   }
-}
 }
