@@ -104,13 +104,15 @@ Well, you're not going to get monads (yet?), but you do get a `Maybe<T>` that re
 
 **Using it**
 
-var result: Maybe<number> = safeIndexOf(myList, 5);
+    var result: Maybe<number> = safeIndexOf(myList, 5);
 
     if (result.hasValue) {
         console.log("5 found!");
     } else {
         console.log("5 not found. :(");
     }
+
+The advantage of this is that now you can mark all your functions that can return null in the *type*, which reduces bugs! Aren't types great?
 
 ### Is that it?
 
