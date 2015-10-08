@@ -12,10 +12,12 @@ It's what you're here for, right?
 
 **Keys and Values**
 
-    class PaintCanvas extends Ambrosia {
-      @prop width = 400;
-      @prop height = 200;
-    }
+```typescript
+class Canvas extends Ambrosia {
+  @prop width = 400;
+  @prop height = 200;
+}
+```
 
 Now we have a class with two properties, and changing these properties will cause events to be triggered! 
 
@@ -23,46 +25,58 @@ Notice how we use TypeScript decorators to inform Ambrosia that the `width` and 
 
 **Observation:**
 
-    var canvas = new PaintCanvas();
-    
-    canvas.listenTo(canvas, "change", () =>  console.log("Something changed!"));
-    canvas.listenTo(canvas, "change:width", () =>  console.log("Width changed!"));
-    canvas.listenTo(canvas, "change:width:5", () =>  console.log("Width changed to 5!"));
+```typescript
+var canvas = new Canvas();
 
-    canvas.width = 5; // Triggers all 3 of the above events
-    canvas.height = 1; // Triggers just the first one
+canvas.listenTo(canvas, "change", () =>  console.log("Something changed!"));
+canvas.listenTo(canvas, "change:width", () =>  console.log("Width changed!"));
+canvas.listenTo(canvas, "change:width:5", () =>  console.log("Width changed to 5!"));
+
+canvas.width = 5; // Triggers all 3 of the above events
+canvas.height = 1; // Triggers just the first one
+```
 
 ### Validated properties
 
 Ambrosia also provides validated properties:
 
-    class PaintCanvas extends Ambrosia {
-      @validatedProp(PaintCanvas.validateWidth) width: number = 400;
-      
-      public static validateKey(width: number): boolean {
-        return width <= 500 && width >= 0;
-      }
-    }
+```
+class PaintCanvas extends Ambrosia {
+  @validatedProp(PaintCanvas.validateWidth) width: number = 400;
+  
+  public static validateKey(width: number): boolean {
+    return width <= 500 && width >= 0;
+  }
+}
+```
 
 Now let's see what happens:
 
-    var canvas = new PaintCanvas();
-    
-    canvas.width = 100; // fine
-    canvas.width = 0; // still fine
-    canvas.width = 500; // *not* fine, logs to console.error and canvas.width does not change:
-    
-    console.log(canvas.width); // 0
+```typescript
+var canvas = new PaintCanvas();
+
+canvas.width = 100; // fine
+canvas.width = 0; // still fine
+canvas.width = 500; // *not* fine, logs to console.error and canvas.width does not change:
+
+console.log(canvas.width); // 0
+```
+
+Admittedly, I should probably figure out a better way to handle invalid properties.
 
 ### Listening to events
 
 Ambrosia provides `listenTo` - inspired by Backbone:
 
-    listenTo(target: Ambrosia, eventName: string, callback: (...attrs: any[]) => any)
+```typescript
+listenTo(target: Ambrosia, eventName: string, callback: (...attrs: any[]) => any)
+```
 
 There's also `listenToOnce` for when you're only concerned with the first time an event is fired:
 
-    listenToOnce(target: Ambrosia, eventName: string, callback: (...attrs: any[]) => any)
+```typescript
+listenToOnce(target: Ambrosia, eventName: string, callback: (...attrs: any[]) => any)
+```
 
 ### Specific events
 
@@ -86,8 +100,10 @@ etc.
 
 Feel free to trigger your own events:
 
-    myObject.listenTo(myObject, "woohoo", function(a: number, b: number) { console.log(a, b); })
-    myObject.trigger("woohoo", 5, 6); // Will console.log 5 and 6
+```typescript
+myObject.listenTo(myObject, "woohoo", function(a: number, b: number) { console.log(a, b); })
+myObject.trigger("woohoo", 5, 6); // Will console.log 5 and 6
+```
 
 ### Maybe<T>
 
@@ -101,25 +117,29 @@ Well, you're not going to get monads (yet?), but you do get a `Maybe<T>` that re
 
 **A function that returns a nullable number:**
 
-    function safeIndexOf(array: number[], value: number): Maybe<number> {
-        var index = array.indexOf(value);
-        
-        if (index == -1) {
-            return Maybe<number>();
-        } else {
-            return Maybe<number>(index);
-        }
+```typescript
+function safeIndexOf(array: number[], value: number): Maybe<number> {
+    var index = array.indexOf(value);
+    
+    if (index == -1) {
+        return Maybe<number>();
+    } else {
+        return Maybe<number>(index);
     }
+}
+```
 
 **Using it**
 
-    var result: Maybe<number> = safeIndexOf(myList, 5);
+```typescript
+var result: Maybe<number> = safeIndexOf(myList, 5);
 
-    if (result.hasValue) {
-        console.log("5 found!");
-    } else {
-        console.log("5 not found. :(");
-    }
+if (result.hasValue) {
+    console.log("5 found!");
+} else {
+    console.log("5 not found. :(");
+}
+```
 
 The advantage of this is that now you can mark all your functions that can return null in the *type*, which reduces bugs! Aren't types great?
 
